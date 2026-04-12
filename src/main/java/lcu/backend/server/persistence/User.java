@@ -1,5 +1,6 @@
 package lcu.backend.server.persistence;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -36,6 +37,7 @@ public class User {
         return email;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

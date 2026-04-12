@@ -1,7 +1,10 @@
 package lcu.backend.server.services;
 
+import lcu.backend.server.persistence.User;
 import lcu.backend.server.persistence.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,11 +19,13 @@ public class UserService {
     }
 
     public boolean isUserRequester(String username) {
-        return this.userRepo.findById("requester").get().getRole().equals("requester");
+        Optional<User> user = this.userRepo.findById(username);
+        return user.map(value -> value.getRole().equals("RICHIEDENTE")).orElse(false);
     }
 
     public boolean isUserMediator(String username) {
-        return this.userRepo.findById("mediator").get().getRole().equals("mediator");
+        Optional<User> user = this.userRepo.findById(username);
+        return user.map(value -> value.getRole().equals("MEDIATORE")).orElse(false);
     }
 
     public boolean checkCredentials(String username, String password) {

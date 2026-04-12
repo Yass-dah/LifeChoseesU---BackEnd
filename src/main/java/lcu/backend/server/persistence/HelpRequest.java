@@ -33,11 +33,11 @@ public class HelpRequest {
     private String country;
 
     @ManyToOne
-    @JoinColumn(name = "requester_id", nullable = false)
+    @JoinColumn(name = "requester_username", nullable = false)
     private User requester;
 
     @ManyToOne
-    @JoinColumn(name = "mediator_id")
+    @JoinColumn(name = "mediator_username")
     private User mediator;
 
     @Column(name = "anonymous", nullable = false)
@@ -102,5 +102,18 @@ public class HelpRequest {
 
     public Timestamp getCreatedAt() {
         return createdAt;
+    }
+
+    // Basic setters
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setMediator(User mediator) {
+        this.mediator = mediator;
+    }
+
+    public void setAidAnswer(String aidAnswer) {
+        this.aidAnswer = aidAnswer;
     }
 }
