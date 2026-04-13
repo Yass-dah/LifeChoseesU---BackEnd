@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/help-requests")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class HelpRequestController {
     private final HelpRequestService helpRequestService;
 

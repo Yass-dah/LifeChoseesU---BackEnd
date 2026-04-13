@@ -28,6 +28,11 @@ public class UserService {
         return user.map(value -> value.getRole().equals("MEDIATORE")).orElse(false);
     }
 
+    public String getRole(String username) {
+        Optional<User> user = this.userRepo.findById(username);
+        return user.map(User::getRole).orElse(null);
+    }
+
     public boolean checkCredentials(String username, String password) {
         return this.userRepo.existsByUsernameAndPassword(username, password);
     }
