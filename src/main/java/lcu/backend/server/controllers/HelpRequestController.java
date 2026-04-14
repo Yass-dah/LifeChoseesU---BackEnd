@@ -22,22 +22,22 @@ public class HelpRequestController {
         return ResponseEntity.ok(helpRequestService.getAllRequests());
     }
 
-    @GetMapping("/type={type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<List<HelpRequest>> getHelpRequestsByType(@PathVariable("type") String type) {
         return ResponseEntity.ok(helpRequestService.getRequestsByType(type));
     }
 
-    @GetMapping("/urgency={urgency}")
+    @GetMapping("/urgency/{urgency}")
     public ResponseEntity<List<HelpRequest>> getHelpRequestsByUrgency(@PathVariable("urgency") String urgency) {
         return ResponseEntity.ok(helpRequestService.getRequestsByUrgency(urgency));
     }
 
-    @GetMapping("/status={status}")
+    @GetMapping("/status/{status}")
     public ResponseEntity<List<HelpRequest>> getHelpRequestsByStatus(@PathVariable("status") String status) {
         return ResponseEntity.ok(helpRequestService.getRequestsByStatus(status));
     }
 
-    @GetMapping("/country={country}")
+    @GetMapping("/country/{country}")
     public ResponseEntity<List<HelpRequest>> getHelpRequestsByCountry(@PathVariable("country") String country) {
         return ResponseEntity.ok(helpRequestService.getRequestsByCountry(country));
     }

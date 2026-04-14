@@ -1,4 +1,4 @@
-package lcu.backend.server.filter;
+/*package lcu.backend.server.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,3 +34,4 @@ public class LoginFilter implements Filter {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
+*/

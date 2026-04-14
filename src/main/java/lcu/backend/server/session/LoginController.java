@@ -27,7 +27,8 @@ public class LoginController {
     public ResponseEntity<SessionData> login(
             HttpSession session,
             @RequestParam(required = false) String username,
-            @RequestParam(required = false) String password) {
+            @RequestParam(required = false) String password,
+            @RequestParam(required = false) String role) {
         String existingUser = (String) session.getAttribute("username");
         if (existingUser != null) {
             if (existingUser.equals(username))
@@ -36,9 +37,10 @@ public class LoginController {
             return ResponseEntity.badRequest().body(new SessionData("",
                     (String) session.getAttribute("role"), "Another user authenticated."));
         }
-        boolean auth = userService.checkCredentials(username, password);
+        boolean validRole = (role != null && userService.getRole(username).equals(role));
+        boolean validCredentials = userService.checkCredentials(username, password);
+        boolean auth = validRole && validCredentials;
         if (auth) {
-            String role = userService.getRole(username);
             session.setAttribute("username", username);
             session.setAttribute("role", role);
             session.setMaxInactiveInterval(900);

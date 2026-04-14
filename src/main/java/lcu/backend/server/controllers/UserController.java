@@ -2,7 +2,6 @@ package lcu.backend.server.controllers;
 
 import lcu.backend.server.persistence.HelpRequest;
 import lcu.backend.server.services.HelpRequestService;
-import lcu.backend.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +10,9 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class UserController {
-    private final UserService userService;
     private final HelpRequestService helpRequestService;
 
-    public UserController(UserService userService, HelpRequestService helpRequestService) {
-        this.userService = userService;
+    public UserController(HelpRequestService helpRequestService) {
         this.helpRequestService = helpRequestService;
     }
 
