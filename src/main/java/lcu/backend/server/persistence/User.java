@@ -33,6 +33,7 @@ public class User {
         return username;
     }
 
+    @JsonIgnore
     public String getEmail() {
         return email;
     }

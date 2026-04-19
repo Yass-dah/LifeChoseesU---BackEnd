@@ -78,7 +78,7 @@ public class HelpRequestService {
         HelpRequest request = helpRequestRepo.findById(requestId).orElse(null);
 
         if (request != null && request.getMediator() != null) {
-            boolean validMed = request.getMediator().getUsername().equals(mediatorUsername);
+            boolean validMed = request.getMediator().equals(mediatorUsername);
             boolean validReq = validMed && request.getStatus().equals("IN_GESTIONE");
             if (validReq) {
                 request.setStatus("RISOLTO");
@@ -93,7 +93,7 @@ public class HelpRequestService {
         HelpRequest request = helpRequestRepo.findById(requestId).orElse(null);
 
         if (request != null && request.getMediator() != null) {
-            boolean validMed = request.getMediator().getUsername().equals(mediatorUsername);
+            boolean validMed = request.getMediator().equals(mediatorUsername);
             boolean validReq = validMed && request.getStatus().equals("IN_GESTIONE");
             if (validReq) {
                 request.setAidAnswer(answer);

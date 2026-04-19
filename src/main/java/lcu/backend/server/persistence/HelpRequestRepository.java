@@ -14,5 +14,4 @@ public interface HelpRequestRepository extends JpaRepository<HelpRequest, Intege
     List<HelpRequest> findByType(String type);
     List<HelpRequest> findByCountry(String country);
     List<HelpRequest> findByMediatorIsNull();
-    List<HelpRequest> findByMediatorUsernameAndStatus(String username, String status);
 }

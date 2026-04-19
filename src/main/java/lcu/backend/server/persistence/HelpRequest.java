@@ -14,6 +14,7 @@ public class HelpRequest {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @ManyToOne
     @Column(name = "location", nullable = false)
     private String location;
 
@@ -28,9 +29,6 @@ public class HelpRequest {
 
     @Column(name = "status", nullable = false)
     private String status;
-
-    @Column(name = "country", nullable = false)
-    private String country;
 
     @ManyToOne
     @JoinColumn(name = "requester_username", nullable = false)
@@ -50,6 +48,24 @@ public class HelpRequest {
     private Timestamp createdAt;
 
     public HelpRequest() {}
+
+    public HelpRequest(String title,
+                       String location,
+                       String description,
+                       String type,
+                       String urgency,
+                       String country,
+                       User requester,
+                       boolean anonymous){
+        this.title = title;
+        this.location = location;
+        this.description = description;
+        this.type = type;
+        this.urgency = urgency;
+        this.country = country;
+        this.requester = requester;
+        this.anonymous = anonymous;
+    }
 
     // Getters
     public int getId() {
@@ -84,12 +100,12 @@ public class HelpRequest {
         return country;
     }
 
-    public User getRequester() {
-        return requester;
+    public String getRequester() {
+        return requester != null ? requester.getUsername() : null;
     }
 
-    public User getMediator() {
-        return mediator;
+    public String getMediator() {
+        return mediator != null ? mediator.getUsername() : null;
     }
 
     public boolean isAnonymous() {

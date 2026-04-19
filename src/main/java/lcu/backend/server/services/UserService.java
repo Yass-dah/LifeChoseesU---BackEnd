@@ -18,6 +18,10 @@ public class UserService {
         return this.userRepo.existsById(username);
     }
 
+    public User findByUsername(String username) {
+        return userRepo.findById(username).orElse(null);
+    }
+
     public boolean isUserRequester(String username) {
         Optional<User> user = this.userRepo.findById(username);
         return user.map(value -> value.getRole().equals("RICHIEDENTE")).orElse(false);
