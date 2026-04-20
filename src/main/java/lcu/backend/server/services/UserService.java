@@ -40,4 +40,8 @@ public class UserService {
     public boolean checkCredentials(String username, String password) {
         return this.userRepo.existsByUsernameAndPassword(username, password);
     }
+
+    public User registerUser(User user) {
+        return userRepo.save(user);
+    }
 }

@@ -1,8 +1,11 @@
 package lcu.backend.server.controllers;
 
 import jakarta.servlet.http.HttpSession;
+import lcu.backend.server.persistence.AidAnswer;
 import lcu.backend.server.persistence.HelpRequest;
+import lcu.backend.server.persistence.Location;
 import lcu.backend.server.services.HelpRequestService;
+import lcu.backend.server.services.LocationService;
 import lcu.backend.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +18,12 @@ import java.util.Map;
 public class UserController {
     private final HelpRequestService helpRequestService;
     private final UserService userService;
+    private final LocationService locationService;
 
-    public UserController(HelpRequestService helpRequestService, UserService userService) {
+    public UserController(HelpRequestService helpRequestService, UserService userService, LocationService locationService) {
         this.helpRequestService = helpRequestService;
         this.userService = userService;
+        this.locationService = locationService;
     }
 
     @GetMapping("/mediator/{username}")
@@ -33,6 +38,19 @@ public class UserController {
         if (username == null || userService.isUserMediator(username))
             return ResponseEntity.status(401).body(null);
         return ResponseEntity.ok(helpRequestService.getRequesterRequests(username));
+    }
+
+    @GetMapping("/hr/{id}/response")
+    public ResponseEntity<AidAnswer> response(
+            @PathVariable Integer id,
+            HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        if (username == null || userService.isUserRequester(username))
+            return ResponseEntity.status(401).body(null);
+        AidAnswer aidAnswer = helpRequestService.getAidAnswer(id);
+        if (aidAnswer == null)
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(aidAnswer);
     }
 
     @PostMapping("/hr/{id}/assign")
@@ -74,12 +92,13 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         if (username == null || userService.isUserMediator(username))
             return ResponseEntity.status(401).body(null);
+        Location location = locationService.addLocation(body.get("location"),
+                locationService.getCountry(body.get("country")));
         HelpRequest req = new HelpRequest(body.get("title"),
-                body.get("location"),
+                location,
                 body.get("description"),
                 body.get("type"),
                 body.get("urgency"),
-                body.get("country"),
                 userService.findByUsername(username),
                 "true".equals(body.get("anonymous")));
         return ResponseEntity.ok(helpRequestService.createRequest(req));

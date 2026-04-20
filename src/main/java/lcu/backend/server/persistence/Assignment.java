@@ -27,6 +27,12 @@ public class Assignment {
 
     public Assignment() {}
 
+    public Assignment(User mediator, HelpRequest request, String type) {
+        this.mediator = mediator;
+        this.request = request;
+        this.type = type;
+    }
+
     // Getters
     public int getId() {
         return id;
@@ -46,5 +52,9 @@ public class Assignment {
 
     public Timestamp getAssignedAt() {
         return assignedAt;
+    }
+
+    public void setResolved(){
+        this.type = "RISOLTO";
     }
 }

@@ -18,6 +18,11 @@ public class Location {
 
     public Location() {}
 
+    public Location(String city, Country country) {
+        this.city = city;
+        this.country = country;
+    }
+
     // Getters
     public int getId() {
         return id;

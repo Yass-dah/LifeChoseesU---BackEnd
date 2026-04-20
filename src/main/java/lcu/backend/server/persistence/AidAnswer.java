@@ -23,14 +23,10 @@ public class AidAnswer {
 
     public AidAnswer() {}
 
-    @PrePersist
-    public void onCreate() {
-        this.modifiedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        this.modifiedAt = LocalDateTime.now();
+    public AidAnswer(String answer, HelpRequest request, LocalDateTime modifiedAt) {
+        this.answer = answer;
+        this.request = request;
+        this.modifiedAt = modifiedAt;
     }
 
     // Getters
@@ -48,5 +44,13 @@ public class AidAnswer {
 
     public LocalDateTime getModifiedAt() {
         return modifiedAt;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public void setModifiedAt(LocalDateTime modifiedAt) {
+        this.modifiedAt = modifiedAt;
     }
 }

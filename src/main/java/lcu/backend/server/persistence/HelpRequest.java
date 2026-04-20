@@ -15,8 +15,8 @@ public class HelpRequest {
     private String title;
 
     @ManyToOne
-    @Column(name = "location", nullable = false)
-    private String location;
+    @JoinColumn(name = "location", nullable = false)
+    private Location location;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -41,20 +41,16 @@ public class HelpRequest {
     @Column(name = "anonymous", nullable = false)
     private boolean anonymous;
 
-    @Column(name = "aid_answer")
-    private String aidAnswer;
-
     @Column(name = "created_at")
     private Timestamp createdAt;
 
     public HelpRequest() {}
 
     public HelpRequest(String title,
-                       String location,
+                       Location location,
                        String description,
                        String type,
                        String urgency,
-                       String country,
                        User requester,
                        boolean anonymous){
         this.title = title;
@@ -62,7 +58,6 @@ public class HelpRequest {
         this.description = description;
         this.type = type;
         this.urgency = urgency;
-        this.country = country;
         this.requester = requester;
         this.anonymous = anonymous;
     }
@@ -77,7 +72,11 @@ public class HelpRequest {
     }
 
     public String getLocation() {
-        return location;
+        return location.getCity();
+    }
+
+    public String getCountry(){
+        return location.getCountry();
     }
 
     public String getDescription() {
@@ -96,10 +95,6 @@ public class HelpRequest {
         return status;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
     public String getRequester() {
         return requester != null ? requester.getUsername() : null;
     }
@@ -110,10 +105,6 @@ public class HelpRequest {
 
     public boolean isAnonymous() {
         return anonymous;
-    }
-
-    public String getAidAnswer() {
-        return aidAnswer;
     }
 
     public Timestamp getCreatedAt() {
@@ -127,9 +118,5 @@ public class HelpRequest {
 
     public void setMediator(User mediator) {
         this.mediator = mediator;
-    }
-
-    public void setAidAnswer(String aidAnswer) {
-        this.aidAnswer = aidAnswer;
     }
 }

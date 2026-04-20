@@ -1,21 +1,30 @@
 package lcu.backend.server.services;
 
-import lcu.backend.server.persistence.HelpRequest;
-import lcu.backend.server.persistence.HelpRequestRepository;
-import lcu.backend.server.persistence.User;
-import lcu.backend.server.persistence.UserRepository;
+import lcu.backend.server.persistence.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HelpRequestService {
+    private final LocationRepository locationRepo;
     private final HelpRequestRepository helpRequestRepo;
     private final UserRepository userRepo;
+    private final AidAnswerRepository aidAnswerRepo;
+    private final AssignmentRepository assignmentRepo;
 
-    public HelpRequestService(HelpRequestRepository helpRequestRepo, UserRepository userRepo) {
+    public HelpRequestService(HelpRequestRepository helpRequestRepo,
+                              UserRepository userRepo,
+                              LocationRepository locationRepository,
+                              AssignmentRepository assignmentRepo,
+                              AidAnswerRepository aidAnswerRepository) {
         this.helpRequestRepo = helpRequestRepo;
         this.userRepo = userRepo;
+        this.locationRepo = locationRepository;
+        this.aidAnswerRepo = aidAnswerRepository;
+        this.assignmentRepo = assignmentRepo;
     }
 
     // Getters
@@ -36,7 +45,13 @@ public class HelpRequestService {
     }
 
     public List<HelpRequest> getRequestsByCountry(String country) {
-        return helpRequestRepo.findByCountry(country);
+        List<Location> locations = locationRepo.findByCountry_Name(country);
+        return helpRequestRepo.findByLocationIn(locations);
+    }
+
+    public List<HelpRequest> getRequestsByCityAndCountry(String city, String country) {
+        List<Location> locations = locationRepo.findByCityAndCountry_Name(city, country);
+        return helpRequestRepo.findByLocationIn(locations);
     }
 
     public List<HelpRequest> getAvailableRequests() {
@@ -49,6 +64,12 @@ public class HelpRequestService {
 
     public List<HelpRequest> getRequesterRequests(String username) {
         return helpRequestRepo.findByRequesterUsername(username);
+    }
+
+    public AidAnswer getAidAnswer(Integer requestId){
+        if(aidAnswerRepo.existsByRequest_Id(requestId))
+            return aidAnswerRepo.findByRequest_Id(requestId).orElse(null);
+        else return new AidAnswer();
     }
 
     // Operation methods
@@ -68,6 +89,8 @@ public class HelpRequestService {
                 request.setMediator(mediator);
                 request.setStatus("IN_GESTIONE");
                 helpRequestRepo.save(request);
+                Assignment assignment = new Assignment(mediator, request, "PRESA_CARICO");
+                assignmentRepo.save(assignment);
                 return true;
             }
         }
@@ -83,6 +106,10 @@ public class HelpRequestService {
             if (validReq) {
                 request.setStatus("RISOLTO");
                 helpRequestRepo.save(request);
+                assignmentRepo.findByRequest_Id(requestId).ifPresent(a -> {
+                    a.setResolved();
+                    assignmentRepo.save(a);
+                });
                 return true;
             }
         }
@@ -96,8 +123,14 @@ public class HelpRequestService {
             boolean validMed = request.getMediator().equals(mediatorUsername);
             boolean validReq = validMed && request.getStatus().equals("IN_GESTIONE");
             if (validReq) {
-                request.setAidAnswer(answer);
-                helpRequestRepo.save(request);
+                Optional<AidAnswer> existing = aidAnswerRepo.findByRequest_Id(requestId);
+                AidAnswer aidAnswer;
+                if (existing.isPresent()) {
+                    aidAnswer = existing.get();
+                    aidAnswer.setAnswer(answer);
+                    aidAnswer.setModifiedAt(LocalDateTime.now());
+                } else aidAnswer = new AidAnswer(answer, request, LocalDateTime.now());
+                aidAnswerRepo.save(aidAnswer);
                 return true;
             }
         }

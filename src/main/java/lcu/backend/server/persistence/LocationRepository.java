@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface LocationRepository extends JpaRepository<Location, Integer> {
     List<Location> findByCountry_Name(String countryName);
-    List<Location> findByCityContainingIgnoreCase(String city);
+    List<Location> findByCityAndCountry_Name(String city, String countryName);
 }
