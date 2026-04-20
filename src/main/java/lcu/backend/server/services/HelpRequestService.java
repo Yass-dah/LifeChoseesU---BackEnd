@@ -28,6 +28,10 @@ public class HelpRequestService {
     }
 
     // Getters
+    public HelpRequest getRequestById(int id) {
+        return helpRequestRepo.findById(id).orElse(null);
+    }
+
     public List<HelpRequest> getAllRequests() {
         return helpRequestRepo.findAll();
     }

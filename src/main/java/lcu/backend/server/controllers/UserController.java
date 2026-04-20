@@ -45,7 +45,11 @@ public class UserController {
             @PathVariable Integer id,
             HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if (username == null || userService.isUserRequester(username))
+        if(username == null)
+            return ResponseEntity.status(401).body(null);
+        boolean permitted = (username.equals(helpRequestService.getRequestById(id).getRequester())
+                || username.equals(helpRequestService.getRequestById(id).getMediator()));
+        if (!permitted)
             return ResponseEntity.status(401).body(null);
         AidAnswer aidAnswer = helpRequestService.getAidAnswer(id);
         if (aidAnswer == null)
@@ -102,5 +106,18 @@ public class UserController {
                 userService.findByUsername(username),
                 "true".equals(body.get("anonymous")));
         return ResponseEntity.ok(helpRequestService.createRequest(req));
+    }
+
+    @DeleteMapping("/hr/{id}/delete")
+    public ResponseEntity<Boolean> delete(
+            @PathVariable Integer id,
+            HttpSession session){
+        String username = (String) session.getAttribute("username");
+        if(username == null)
+            return ResponseEntity.status(401).body(false);
+        boolean permitted = username.equals(helpRequestService.getRequestById(id).getRequester());
+        if (!permitted)
+            return ResponseEntity.status(401).body(false);
+        return ResponseEntity.ok(helpRequestService.deleteRequest(id));
     }
 }

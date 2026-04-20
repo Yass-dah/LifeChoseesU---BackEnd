@@ -1,4 +1,4 @@
-/*package lcu.backend.server.filter;
+package lcu.backend.server.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,12 +13,24 @@ import java.io.IOException;
 @Order(1)
 public class LoginFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest,
+                         ServletResponse servletResponse,
+                         FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse res = (HttpServletResponse) servletResponse;
-        HttpSession session = request.getSession();
-        String user = (String) session.getAttribute("username");
-        if (request.getMethod().equals("OPTIONS")) {
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
+        res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            res.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        HttpSession session = request.getSession(false);
+        String user = (session != null) ? (String) session.getAttribute("username") : null;
+        String path = request.getServletPath();
+        if (path.startsWith("/session") || path.equals("/help-requests/countries")) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
@@ -26,12 +38,6 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
-        String pathname = request.getServletPath();
-        if (pathname.startsWith("/session")) {
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-        res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
-*/
