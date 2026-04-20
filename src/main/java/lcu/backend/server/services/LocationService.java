@@ -23,11 +23,6 @@ public class LocationService {
         return countryRepository.findAll();
     }
 
-    public String getCountryFlag(String country) {
-        Optional<Country> countryOptional = countryRepository.findByName(country);
-        return countryOptional.isPresent() ? countryOptional.get().getFlag() : "";
-    }
-
     public Country getCountry(String country) {
         return countryRepository.findByName(country).orElse(null);
     }

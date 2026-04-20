@@ -53,11 +53,6 @@ public class HelpRequestService {
         return helpRequestRepo.findByLocationIn(locations);
     }
 
-    public List<HelpRequest> getRequestsByCityAndCountry(String city, String country) {
-        List<Location> locations = locationRepo.findByCityAndCountry_Name(city, country);
-        return helpRequestRepo.findByLocationIn(locations);
-    }
-
     public List<HelpRequest> getAvailableRequests() {
         return helpRequestRepo.findByMediatorIsNull();
     }
