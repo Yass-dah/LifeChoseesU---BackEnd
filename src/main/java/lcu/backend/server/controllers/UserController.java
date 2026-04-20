@@ -52,8 +52,6 @@ public class UserController {
         if (!permitted)
             return ResponseEntity.status(401).body(null);
         AidAnswer aidAnswer = helpRequestService.getAidAnswer(id);
-        if (aidAnswer == null)
-            return ResponseEntity.noContent().build();
         return ResponseEntity.ok(aidAnswer);
     }
 

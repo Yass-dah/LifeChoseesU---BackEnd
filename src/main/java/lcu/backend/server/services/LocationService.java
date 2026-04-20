@@ -7,7 +7,6 @@ import lcu.backend.server.persistence.LocationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class LocationService {
