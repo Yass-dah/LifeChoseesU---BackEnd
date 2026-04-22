@@ -2,6 +2,7 @@
 LifeChoosesU servlet Web Application (backend), works with JDBC -> PostgreSQL 
 reminder: change application properties to your pgadmin ones
 SQL template code for database creation:
+```
 CREATE TABLE countries (
     name VARCHAR(50) PRIMARY KEY,
     flag VARCHAR(2) UNIQUE NOT NULL
@@ -76,3 +77,4 @@ CREATE TABLE assignments (
         REFERENCES help_requests(id)
         ON DELETE CASCADE
 )
+```
