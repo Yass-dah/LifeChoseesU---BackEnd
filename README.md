@@ -1,6 +1,6 @@
 ﻿# LifeChoseesU---BackEnd
-LifeChoosesU servlet Web Application (backend), works with JDBC -> PostgreSQL 
-reminder: change application properties to your pgadmin ones
+LifeChoosesU servlet Web Application (backend of [https://github.com/Yass-dah/LifeChoosesU]), works with JDBC -> PostgreSQL<br/> 
+Reminder: change application properties file to your pgadmin ones
 SQL template code for database creation:
 ```
 CREATE TABLE countries (
