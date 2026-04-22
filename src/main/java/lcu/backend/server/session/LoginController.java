@@ -5,6 +5,7 @@ import lcu.backend.server.persistence.User;
 import lcu.backend.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tools.jackson.databind.node.StringNode;
 
 import java.util.Map;
 
@@ -26,12 +27,13 @@ public class LoginController {
         return ResponseEntity.ok(new SessionData(username, userService.getRole(username), "Logged"));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<SessionData> login(
             HttpSession session,
-            @RequestParam(required = false) String username,
-            @RequestParam(required = false) String password,
-            @RequestParam(required = false) String role) {
+            @RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String password = body.get("password");
+        String role = body.get("role");
         String existingUser = (String) session.getAttribute("username");
         if (existingUser != null) {
             if (existingUser.equals(username))

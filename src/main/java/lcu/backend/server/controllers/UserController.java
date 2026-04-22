@@ -55,7 +55,7 @@ public class UserController {
         return ResponseEntity.ok(aidAnswer);
     }
 
-    @PostMapping("/hr/{id}/assign")
+    @GetMapping("/hr/{id}/assign")
     public ResponseEntity<Boolean> assign(
             @PathVariable Integer id,
             HttpSession session) {
@@ -65,7 +65,7 @@ public class UserController {
         return ResponseEntity.ok(helpRequestService.assignRequest(id, username));
     }
 
-    @PostMapping("/hr/{id}/resolve")
+    @GetMapping("/hr/{id}/resolve")
     public ResponseEntity<Boolean> resolve(
             @PathVariable Integer id,
             HttpSession session) {
