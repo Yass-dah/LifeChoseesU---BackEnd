@@ -14,8 +14,12 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public boolean userExists(String username) {
+    public boolean userExistsUsername(String username) {
         return this.userRepo.existsById(username);
+    }
+
+    public boolean userExistsEmail(String email) {
+        return this.userRepo.existsByEmail(email);
     }
 
     public User findByUsername(String username) {

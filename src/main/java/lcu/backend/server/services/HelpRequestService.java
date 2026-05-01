@@ -136,6 +136,16 @@ public class HelpRequestService {
         return false;
     }
 
+    public boolean setRequestAnonymous(Integer requestId, boolean flag) {
+        HelpRequest request = helpRequestRepo.findById(requestId).orElse(null);
+        if(request != null && (flag != request.isAnonymous())) {
+            request.setAnonymous(flag);
+            helpRequestRepo.save(request);
+            return true;
+        }
+        return false;
+    }
+
     public boolean deleteRequest(Integer requestId) {
         if (helpRequestRepo.existsById(requestId)) {
             helpRequestRepo.deleteById(requestId);

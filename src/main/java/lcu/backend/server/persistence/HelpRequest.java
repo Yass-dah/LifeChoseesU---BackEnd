@@ -119,4 +119,8 @@ public class HelpRequest {
     public void setMediator(User mediator) {
         this.mediator = mediator;
     }
+
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
+    }
 }

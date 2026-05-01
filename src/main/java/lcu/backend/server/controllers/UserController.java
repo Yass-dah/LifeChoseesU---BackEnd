@@ -106,6 +106,20 @@ public class UserController {
         return ResponseEntity.ok(helpRequestService.createRequest(req));
     }
 
+    @GetMapping("/hr/{id}/anonymous/{flag}")
+    public ResponseEntity<Boolean> anonymous(
+            @PathVariable Integer id,
+            @PathVariable boolean flag,
+            HttpSession session){
+        String username = (String) session.getAttribute("username");
+        if(username == null)
+            return ResponseEntity.status(401).body(false);
+        boolean permitted = username.equals(helpRequestService.getRequestById(id).getRequester());
+        if(!permitted)
+            return ResponseEntity.status(401).body(false);
+        return ResponseEntity.ok(helpRequestService.setRequestAnonymous(id, flag));
+    }
+
     @DeleteMapping("/hr/{id}/delete")
     public ResponseEntity<Boolean> delete(
             @PathVariable Integer id,

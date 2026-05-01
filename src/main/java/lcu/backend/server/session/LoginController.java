@@ -5,7 +5,6 @@ import lcu.backend.server.persistence.User;
 import lcu.backend.server.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tools.jackson.databind.node.StringNode;
 
 import java.util.Map;
 
@@ -71,8 +70,10 @@ public class LoginController {
         String password = body.get("password");
         String role = body.get("role");
 
-        if (userService.userExists(username))
+        if (userService.userExistsUsername(username))
             return ResponseEntity.status(401).body("username already exists");
+        if(userService.userExistsEmail(email))
+            return ResponseEntity.status(401).body("email already exists");
         User user = userService.registerUser(new User(username, email, password, role));
         return ResponseEntity.ok("User " + user.getUsername() + " successfully registered");
     }
