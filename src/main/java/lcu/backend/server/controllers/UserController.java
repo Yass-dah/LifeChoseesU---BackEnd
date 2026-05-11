@@ -26,6 +26,26 @@ public class UserController {
         this.locationService = locationService;
     }
 
+    // Permission checkers
+    private boolean checkReqPerm(String username, Integer reqId) {
+        if(username == null)
+            return false;
+        HelpRequest request = helpRequestService.getRequestById(reqId);
+        if(request == null)
+            return false;
+        return username.equals(request.getRequester());
+    }
+
+    private boolean checkMedPerm(String username, Integer reqId) {
+        if(username == null)
+            return false;
+        HelpRequest request = helpRequestService.getRequestById(reqId);
+        if(request == null)
+            return false;
+        return username.equals(request.getMediator());
+    }
+
+    // Routes
     @GetMapping("/mediator/{username}")
     public ResponseEntity<List<HelpRequest>> getMediatorRequests(@PathVariable String username) {
         if (username == null || userService.isUserRequester(username))
@@ -41,15 +61,11 @@ public class UserController {
     }
 
     @GetMapping("/hr/{id}/response")
-    public ResponseEntity<AidAnswer> response(
+    public ResponseEntity<AidAnswer> getResponse(
             @PathVariable Integer id,
             HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if(username == null)
-            return ResponseEntity.status(401).body(null);
-        boolean permitted = (username.equals(helpRequestService.getRequestById(id).getRequester())
-                || username.equals(helpRequestService.getRequestById(id).getMediator()));
-        if (!permitted)
+        if (!(checkMedPerm(username, id) || checkReqPerm(username, id)))
             return ResponseEntity.status(401).body(null);
         AidAnswer aidAnswer = helpRequestService.getAidAnswer(id);
         return ResponseEntity.ok(aidAnswer);
@@ -70,9 +86,9 @@ public class UserController {
             @PathVariable Integer id,
             HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if (username == null || userService.isUserRequester(username))
-            return ResponseEntity.status(401).body(false);
-        return ResponseEntity.ok(helpRequestService.resolveRequest(id, username));
+        return checkMedPerm(username, id) ?
+                ResponseEntity.ok(helpRequestService.resolveRequest(id, username)) :
+                ResponseEntity.status(401).body(false);
     }
 
     @PostMapping("/hr/{id}/answer")
@@ -81,7 +97,7 @@ public class UserController {
             @RequestBody Map<String, String> body,
             HttpSession session) {
         String username = (String) session.getAttribute("username");
-        if (username == null || userService.isUserRequester(username))
+        if (!checkMedPerm(username, id))
             return ResponseEntity.status(401).body(false);
         String answer = body.get("answer");
         return ResponseEntity.ok(helpRequestService.addAnswer(id, username, answer));
@@ -112,12 +128,9 @@ public class UserController {
             @PathVariable boolean flag,
             HttpSession session){
         String username = (String) session.getAttribute("username");
-        if(username == null)
-            return ResponseEntity.status(401).body(false);
-        boolean permitted = username.equals(helpRequestService.getRequestById(id).getRequester());
-        if(!permitted)
-            return ResponseEntity.status(401).body(false);
-        return ResponseEntity.ok(helpRequestService.setRequestAnonymous(id, flag));
+        return checkReqPerm(username, id) ?
+                ResponseEntity.ok(helpRequestService.setRequestAnonymous(id, flag)) :
+                ResponseEntity.status(401).body(false);
     }
 
     @DeleteMapping("/hr/{id}/delete")
@@ -125,11 +138,8 @@ public class UserController {
             @PathVariable Integer id,
             HttpSession session){
         String username = (String) session.getAttribute("username");
-        if(username == null)
-            return ResponseEntity.status(401).body(false);
-        boolean permitted = username.equals(helpRequestService.getRequestById(id).getRequester());
-        if (!permitted)
-            return ResponseEntity.status(401).body(false);
-        return ResponseEntity.ok(helpRequestService.deleteRequest(id));
+        return checkReqPerm(username, id) ?
+                ResponseEntity.ok(helpRequestService.deleteRequest(id)) :
+                ResponseEntity.status(401).body(false);
     }
 }
