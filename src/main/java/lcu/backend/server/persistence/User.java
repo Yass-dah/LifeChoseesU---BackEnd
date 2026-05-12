@@ -16,6 +16,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "country")
+    private String country;
+
     @Column(name = "role", nullable = false)
     private String role;
 
@@ -25,6 +28,14 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
+    }
+
+    public User(String username, String email, String password, String country, String role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.country = country;
         this.role = role;
     }
 
@@ -41,6 +52,10 @@ public class User {
     @JsonIgnore
     public String getPassword() {
         return password;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     public String getRole() {
