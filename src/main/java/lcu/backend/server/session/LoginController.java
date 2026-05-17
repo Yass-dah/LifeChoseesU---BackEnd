@@ -22,8 +22,11 @@ public class LoginController {
     public ResponseEntity<SessionData> getUser(HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (username == null)
-            return ResponseEntity.ok(new SessionData("", "", "Not logged"));
-        return ResponseEntity.ok(new SessionData(username, userService.getRole(username), "Logged"));
+            return ResponseEntity.ok(new SessionData("", "", "", "Not logged"));
+        return ResponseEntity.ok(new SessionData(username,
+                userService.getRole(username),
+                userService.getCountry(username),
+                "Logged"));
     }
 
     @PostMapping("/login")
@@ -37,9 +40,13 @@ public class LoginController {
         if (existingUser != null) {
             if (existingUser.equals(username))
                 return ResponseEntity.ok(new SessionData(username,
-                        (String) session.getAttribute("role"), "User already authenticated."));
+                        (String) session.getAttribute("role"),
+                        (String) session.getAttribute("country"),
+                        "User already authenticated."));
             return ResponseEntity.badRequest().body(new SessionData("",
-                    (String) session.getAttribute("role"), "Another user authenticated."));
+                    (String) session.getAttribute("role"),
+                    (String) session.getAttribute("country"),
+                    "Another user authenticated."));
         }
         boolean validRole = (role != null && role.equals(userService.getRole(username)));
         boolean validCredentials = userService.checkCredentials(username, password);
@@ -47,19 +54,21 @@ public class LoginController {
         if (auth) {
             session.setAttribute("username", username);
             session.setAttribute("role", role);
-            session.setMaxInactiveInterval(900);
-            return ResponseEntity.ok(new SessionData(username, role, "Log in successful."));
+            return ResponseEntity.ok(new SessionData(username,
+                    role,
+                    userService.getCountry(username),
+                    "Log in successful."));
         }
-        return ResponseEntity.status(401).body(new SessionData("", "", "Invalid credentials."));
+        return ResponseEntity.status(401).body(new SessionData("", "","", "Invalid credentials."));
     }
 
     @GetMapping("/logout")
     public ResponseEntity<SessionData> logout(HttpSession session) {
         String existingUser = (String) session.getAttribute("username");
         if (existingUser == null)
-            return ResponseEntity.ok(new SessionData("","", "No user to log out."));
+            return ResponseEntity.ok(new SessionData("","", "","No user to log out."));
         session.invalidate();
-        return ResponseEntity.ok(new SessionData("", "", "User successfully logged out."));
+        return ResponseEntity.ok(new SessionData("", "", "","User successfully logged out."));
     }
 
     @PostMapping("/register")
@@ -70,7 +79,7 @@ public class LoginController {
         String password = body.get("password");
         String role = body.get("role");
 
-        if (userService.userExistsUsername(username))
+        if(userService.userExistsUsername(username))
             return ResponseEntity.status(401).body("username already exists");
         if(userService.userExistsEmail(email))
             return ResponseEntity.status(401).body("email already exists");
