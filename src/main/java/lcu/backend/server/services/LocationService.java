@@ -9,16 +9,13 @@ import java.util.Map;
 
 @Service
 public class LocationService {
-    private final HelpRequestRepository helpRequestRepository;
     private final CountryRepository countryRepository;
     private final LocationRepository locationRepository;
 
     public LocationService(CountryRepository countryRepository,
-                           LocationRepository locationRepository,
-                           HelpRequestRepository helpRequestRepository) {
+                           LocationRepository locationRepository) {
         this.countryRepository = countryRepository;
         this.locationRepository = locationRepository;
-        this.helpRequestRepository = helpRequestRepository;
     }
 
     public List<Country> getAllCountries() {
