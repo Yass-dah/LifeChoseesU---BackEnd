@@ -66,7 +66,7 @@ public class UserController {
             HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (!(checkMedPerm(username, id) || checkReqPerm(username, id)))
-            return ResponseEntity.status(401).body(null);
+            return ResponseEntity.status(403).body(null);
         AidAnswer aidAnswer = helpRequestService.getAidAnswer(id);
         return ResponseEntity.ok(aidAnswer);
     }
@@ -88,7 +88,7 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         return checkMedPerm(username, id) ?
                 ResponseEntity.ok(helpRequestService.resolveRequest(id, username)) :
-                ResponseEntity.status(401).body(false);
+                ResponseEntity.status(403).body(false);
     }
 
     @PostMapping("/hr/{id}/answer")
@@ -98,7 +98,7 @@ public class UserController {
             HttpSession session) {
         String username = (String) session.getAttribute("username");
         if (!checkMedPerm(username, id))
-            return ResponseEntity.status(401).body(false);
+            return ResponseEntity.status(403).body(false);
         String answer = body.get("answer");
         return ResponseEntity.ok(helpRequestService.addAnswer(id, username, answer));
     }
@@ -130,7 +130,7 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         return checkReqPerm(username, id) ?
                 ResponseEntity.ok(helpRequestService.setRequestAnonymous(id, flag)) :
-                ResponseEntity.status(401).body(false);
+                ResponseEntity.status(403).body(false);
     }
 
     @DeleteMapping("/hr/{id}/delete")
@@ -140,6 +140,6 @@ public class UserController {
         String username = (String) session.getAttribute("username");
         return checkReqPerm(username, id) ?
                 ResponseEntity.ok(helpRequestService.deleteRequest(id)) :
-                ResponseEntity.status(401).body(false);
+                ResponseEntity.status(403).body(false);
     }
 }

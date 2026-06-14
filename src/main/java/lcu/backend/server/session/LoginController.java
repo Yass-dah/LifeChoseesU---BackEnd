@@ -54,7 +54,7 @@ public class LoginController {
         if (auth) {
             session.setAttribute("username", username);
             session.setAttribute("role", role);
-            // for session inactivity: session.setMaxInactiveInterval(900);
+            session.setMaxInactiveInterval(900);
             return ResponseEntity.ok(new SessionData(username,
                     role,
                     userService.getCountry(username),
