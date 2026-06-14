@@ -74,12 +74,16 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(
+            HttpSession session,
             @RequestBody Map<String, String> body) {
+        String existingUser = (String) session.getAttribute("username");
         String username = body.get("username");
         String email = body.get("email");
         String password = body.get("password");
         String role = body.get("role");
 
+        if(existingUser != null)
+            return ResponseEntity.badRequest().body("Another user authenticated.");
         if(userService.userExistsUsername(username))
             return ResponseEntity.status(401).body("username already exists");
         if(userService.userExistsEmail(email))
