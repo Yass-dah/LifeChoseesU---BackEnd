@@ -1,12 +1,13 @@
 ﻿# LifeChoseesU---BackEnd
-### LifeChoosesU servlet Web Application (backend of [LCU Client](https://github.com/Yass-dah/LifeChoosesU)), works with JDBC -> PostgreSQL<br/> 
+#### LifeChoosesU servlet Web Application (backend of [LCU Client](https://github.com/Yass-dah/LifeChoosesU)), works with JDBC -> PostgreSQL<br/> 
 #### Reminder: change application properties file to your pgadmin ones
 
 <hr/>
 
 Technologies used:
 - Java
-- Spring Boot
+- Spring
+- Maven
 
 <hr/>
 
