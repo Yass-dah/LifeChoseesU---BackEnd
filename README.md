@@ -1,6 +1,15 @@
 ﻿# LifeChoseesU---BackEnd
-LifeChoosesU servlet Web Application (backend of [https://github.com/Yass-dah/LifeChoosesU]), works with JDBC -> PostgreSQL<br/> 
-Reminder: change application properties file to your pgadmin ones
+### LifeChoosesU servlet Web Application (backend of [LCU Client](https://github.com/Yass-dah/LifeChoosesU)), works with JDBC -> PostgreSQL<br/> 
+#### Reminder: change application properties file to your pgadmin ones
+
+<hr/>
+
+Technologies used:
+- Java
+- Spring Boot
+
+<hr/>
+
 SQL template code for database creation:
 ```
 CREATE TABLE countries (
