@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "https://life-chooses-u.vercel.app", allowCredentials = "true")
 public class UserController {
     private final HelpRequestService helpRequestService;
     private final UserService userService;

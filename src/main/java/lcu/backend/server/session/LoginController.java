@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/session")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "https://life-chooses-u.vercel.app", allowCredentials = "true")
 public class LoginController {
     private final UserService userService;
 
