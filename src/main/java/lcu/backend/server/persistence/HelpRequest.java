@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Table(name = "help_requests")
 public class HelpRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "title", nullable = false)

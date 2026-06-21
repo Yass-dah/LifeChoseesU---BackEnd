@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 @Table(name = "assignments")
 public class Assignment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
