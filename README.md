@@ -1,11 +1,24 @@
 ﻿# LifeChoseesU---BackEnd
-LifeChoosesU servlet Web Application (backend of [https://github.com/Yass-dah/LifeChoosesU]), works with JDBC -> PostgreSQL<br/> 
-Reminder: change application properties file to your pgadmin ones
+#### LifeChoosesU servlet Web Application (backend of [LCU Client](https://github.com/Yass-dah/LifeChoosesU)), works with JDBC -> PostgreSQL<br/> 
+#### Reminder: change application properties file to your pgadmin ones
+
+<hr/>
+
+Technologies used:
+- Java
+- Spring
+- Maven
+
+<hr/>
+
 SQL template code for database creation:
 ```
 CREATE TABLE countries (
     name VARCHAR(50) PRIMARY KEY,
-    flag VARCHAR(2) UNIQUE NOT NULL
+    flag VARCHAR(2) UNIQUE NOT NULL,
+    continent VARCHAR(25) NOT NULL,
+    main_language VARCHAR(25) NOT NULL,
+    emergency_number VARCHAR(20) 
 );
 
 CREATE TABLE location (
@@ -21,7 +34,11 @@ CREATE TABLE users (
     username VARCHAR(100) PRIMARY KEY,
     email VARCHAR(150) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) NOT NULL CHECK (role IN ('RICHIEDENTE', 'MEDIATORE'))
+    country VARCHAR(50),
+    role VARCHAR(20) NOT NULL CHECK (role IN ('RICHIEDENTE', 'MEDIATORE')),
+    CONSTRAINT fk_users_country
+        FOREIGN KEY (country) REFERENCES countries(name)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE help_requests (
@@ -68,11 +85,11 @@ CREATE TABLE assignments (
     type VARCHAR(30) NOT NULL CHECK (type IN ('PRESA_CARICO', 'RISOLTO')),
     assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT fk_mediator
+    CONSTRAINT fk_mediator_assigned
         FOREIGN KEY (mediator_username) REFERENCES users(username)
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_request
+    CONSTRAINT fk_request_related
         FOREIGN KEY (request_id)
         REFERENCES help_requests(id)
         ON DELETE CASCADE
