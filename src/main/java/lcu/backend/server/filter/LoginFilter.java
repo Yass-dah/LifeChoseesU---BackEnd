@@ -45,7 +45,7 @@ public class LoginFilter implements Filter {
                 if (cookie.contains("LCU_SESSION_COOKIE") && !cookie.contains("Partitioned")) {
                     if (!cookie.contains("SameSite"))
                         cookie += "; SameSite=None";
-                    cookie += "; Partitioned"; // Sblocca l'iPhone
+                    cookie += "; Partitioned";
                 }
 
                 if (first) {
